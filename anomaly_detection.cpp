@@ -25,7 +25,7 @@ void writeData(const std::string& filePath, double* outX,
     }
 
     file.precision(15);
-    file << "---NEW-FINGERPRINT-START--\n";
+    file << "---NEW-FINGERPRINT-START---\n";
     for (int k = 0; k < fingerPrintSize; k++)
     {
         file << outX[k] << "," << outY[k] << '\n';

@@ -5,16 +5,18 @@ from matplotlib.pyplot import colormaps
 from matplotlib import pyplot as plt
 
 INPUT_NAME = "input"
-d = 600
+d = 1200
 W = 20480
 
 def plot_embedding(ax, projected, title="TDE"):
-    scores = []
-    for point in projected:
-        scores.append(np.linalg.norm(point))
-    scores = np.array(scores)
-    scores_norm = (scores - np.min(scores)) / (np.max(scores) - np.min(scores))
-    ax.scatter(projected[:, 0], projected[:, 1], s=8, c=colormaps["turbo"](scores_norm))
+    scores = np.linalg.norm(projected, axis=1)
+    scores_norm = (scores - scores.min()) / (scores.max() - scores.min())
+    ax.scatter(projected[:, 0], projected[:, 1], s=8, c=colormaps["turbo"](scores_norm),
+               alpha=0.6, linewidths=0)
+    limit = np.abs(projected).max() * 1.05
+    ax.set_xlim(-limit, limit)
+    ax.set_ylim(-limit, limit)
+    ax.set_aspect("equal", adjustable="box")
     ax.axis("off")
     ax.set_title(title, fontsize=30)
 
@@ -33,5 +35,6 @@ with open("output/output.txt") as file:
 for k, points in enumerate(fingerprints):
     fig, ax = plt.subplots(nrows=1, ncols=1)
     plot_embedding(ax, np.array(points), title=f"Fingerprint {k}")
-    plt.savefig(f"results/tde_{k}.png")
+    #plt.savefig(f"results/tde_{k}.png")
+    plt.show()
     plt.close(fig)
